@@ -1,0 +1,21 @@
+# aws region where the resources are created
+aws_region = "us-east-1"
+
+# number of zones where the resources are created
+zones = 2
+
+# access and secret key for the customer account that will be used
+# by terraform to create resources
+access_key = ""
+secret_key = ""
+
+# prefix tag will be used to identify resources created by terraform
+# vpc, subnets, route tables, security groups
+# e.g. prefix = "valtix_poc"
+prefix = "valtix_poc"
+
+# Create IAM user thats used by the controller to create valtix
+# firewall on customer instances. This user would have ec2, elb
+# permissions and can pass (attach) IAM role to those instances
+# so they can create objects on s3
+user = "valtix_user"
