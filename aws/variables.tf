@@ -1,4 +1,3 @@
-#Variable definitions
 variable "access_key" {
   description = "customer access key"
 }

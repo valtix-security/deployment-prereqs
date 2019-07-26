@@ -36,3 +36,7 @@ output "iam-user-credentials" {
 output "iam-role-for-firewall" {
     value = "${aws_iam_role.valtix_fw_role.name}"
 }
+
+output "s3-bucket-techsupport" {
+  value = format("%s-techsupport", replace(var.prefix, "_", "-"))
+}

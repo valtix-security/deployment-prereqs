@@ -35,7 +35,6 @@
 # and must allow ports so the backend-firewall can forward traffic to
 # these instances.
 
-
 provider "aws" {
   access_key = var.access_key
   secret_key = var.secret_key
@@ -45,6 +44,11 @@ provider "aws" {
 # Declare the data source
 data "aws_availability_zones" "available" {}
 
+
+resource "aws_s3_bucket" "techsupport" {
+  bucket = format("%s-techsupport", replace(var.prefix, "_", "-"))
+  acl = "private"
+}
 
 resource "aws_vpc" "default" {
   cidr_block = "10.0.0.0/16"
@@ -295,7 +299,7 @@ resource "aws_security_group" "customer_apps" {
 # above (valtix_fw_role) to the firewall instances that it creates
 
 resource "aws_iam_user" "valtix_user" {
-  name = "valtix_user"
+  name = "${var.prefix}_user"
 }
 
 resource "aws_iam_access_key" "valtix_user" {
@@ -303,7 +307,7 @@ resource "aws_iam_access_key" "valtix_user" {
 }
 
 resource "aws_iam_user_policy" "valtix_user" {
-  name = "valtix_user"
+  name = "valtix_user_policy"
   user = "${aws_iam_user.valtix_user.name}"
 
   policy = <<EOF
@@ -333,7 +337,7 @@ EOF
 # create a role that will be used by valtix firewall with permissions to
 # write techsupport/pcap files to s3 buckets
 resource "aws_iam_role" "valtix_fw_role" {
-  name = "valtix_fw_role"
+  name = "${var.prefix}_fw_role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -355,7 +359,7 @@ EOF
 # and techsupport info. This is set for all full s3 access and can be
 # changed to give write access only to a certain bucket
 resource "aws_iam_policy" "valtix_s3_access" {
-  name        = "valtix_s3_acess"
+  name = "${var.prefix}_s3_access"
 
   policy = <<EOF
 {
@@ -364,7 +368,7 @@ resource "aws_iam_policy" "valtix_s3_access" {
     {
       "Action": "s3:*",
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "${format("arn:aws:s3:::%s-techsupport/*", replace(var.prefix, "_", "-"))}"
     }
   ]
 }
@@ -382,6 +386,6 @@ resource "aws_iam_role_policy_attachment" "role_policy" {
 # however on the firewall iam role text box you can provide the role
 # name or the arn of either the role or the instance profile
 resource "aws_iam_instance_profile" "valtix_fw_role" {
-  name = "valtix_fw_role"
+  name = "${var.prefix}_fw_role"
   role = "${aws_iam_role.valtix_fw_role.name}"
 }
