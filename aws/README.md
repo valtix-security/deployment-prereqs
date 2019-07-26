@@ -18,14 +18,14 @@ S3 Bucket, Security Groups, IAM User, IAM Role, IAM Policy
 
 Edit **values** file to provide values for the variables:
 
-*aws_region* - AWS region name (e.g. us-east-1)  
+*aws_region* - AWS region name (e.g. us-east-1)
 *zones* - Number of zones you want to create resources and use
-firewall  
+firewall
 *access_key* - AWS access key and secret used to create the
-resources.  
-*secret_key* - Secret key of the above user  
+resources.
+*secret_key* - Secret key of the above user
 *prefix* - All the resources are named/tagged with the prefix
-provided here  
+provided here
 
 ```
 terraform init
@@ -33,7 +33,7 @@ terraform plan -var-file values
 terraform apply -var-file values
 ```
 
-## Destroy all the resource
+## Destroy all the resources
 Once all the firewalls are deleted from the valtix controller
 ```
 terraform destroy -var-file values
@@ -43,7 +43,7 @@ terraform destroy -var-file values
 
 # S3 Bucket
 Valtix firewall uses S3 bucket to store techsupport information and also
-packet capture files (pcap) if configured on the firewall. Create a 
+packet capture files (pcap) if configured on the firewall. Create a
 bucket **valtix-techsupport**.
 
 # IAM Role for Valtix Firewall
@@ -141,11 +141,11 @@ the firewall to send/receive traffic for the customer apps.
 VPC creates a default subnet. We will not use that subnet here. Create
 3 subnets:
 
-subnet **valtix_backend** with CIDR 10.0.1.0/24  
-subnet **valtix_frontend** with CIDR 10.0.2.0/24  
+subnet **valtix_backend** with CIDR 10.0.1.0/24
+subnet **valtix_frontend** with CIDR 10.0.2.0/24
 subnet **valtix_mgmt** with CIDR 10.0.3.0/24
 
-valtix_mgmt and valtix_frontend are public subnets. valtix_backed is 
+valtix_mgmt and valtix_frontend are public subnets. valtix_backed is
 a private subnet that hosts the customer apps.
 
 Valtix firewall is created with 3 network interfaces and assigned to
@@ -208,5 +208,5 @@ TCP Ports 8091-8092 are used by controller and 53 for DNS.
 
 Group **valtix_customer_apps** assigned to instances that run customer apps.
 This must open all the ports that instances require to communicate with
-each other. This sg is not used by valtix firewall and this is 
+each other. This sg is not used by valtix firewall and this is
 specific to customer needs only.
