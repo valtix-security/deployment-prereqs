@@ -1,10 +1,10 @@
 # AWS Deployment Prerequisites
 This folder contains a set of terraform scripts which provisions your demo/POC AWS account with a set of pre-requisite steps needed to deploy a valtix firewall appliance.
 
-## Increase ElasticIP Limits
-A new AWS account by default has a limit of 5 elastic IPs which can be created in it. Before you deploy a valtix firewall in your AWS account, you need to request an increase in the elastic IP limit set by AWS. Each instance of the valtix firewall consumes an elastic ip. An AWS account by default gets 5 elastic ips assigned by aws. You may request to increase this limit. The process usually takes only a few minutes. 
+## Increase Elastic IP Limits
+By default, all AWS accounts are limited to 5 Elastic IPs. Before you deploy a valtix firewall in your AWS account, you need to request an increase in the Elastic IP limit set by AWS. Each instance of the valtix firewall consumes an Elastic IP. An AWS account by default gets 5 Elastic IPs assigned by aws. You may request to increase this limit. The process usually takes only a few minutes. 
 
-The demo/POC scenario will consume atleast 2 elastic ips. If your account has at least 2 free elastic IPs, then you may proceed with the next steps before waiting for the limits to be increased.
+The demo/POC scenario will consume atleast 2 Elastic IPs. If your account has at least 2 free Elastic IPs, then you may proceed with the next steps before waiting for the limits to be increased.
 
 # Quick Start Steps
 
@@ -102,7 +102,7 @@ An AWS VPC has a default subnet. The script does not use that. Instead it create
 
 **valtixpoc_mgmt** and **valtixpoc_frontend** are public subnets, whereas **valtixpoc_backend** is a private subnet that hosts the customer/demo apps. The Valtix firewall is created with 3 network interfaces and assigned to the above subnets. The interface attached to **valtixpoc_frontend** subnet receives all the user traffic destined to the customer/demo apps, which is then processed by firewall and forwarded to the apps via the interface attached to **valtixpoc_backend** subnet.
 
-The interaface attached to the **valtixpoc_mgmt** subnet is used by the firewall to communicate with the valtix controller. The interface in this subnet gets assigned an elastic ip.
+The interaface attached to the **valtixpoc_mgmt** subnet is used by the firewall to communicate with the valtix controller. The interface in this subnet gets assigned an Elastic IP.
 
 ## Route Tables
 Its recommended to not make any changes to the default route table of the VPC as all the subnets fall back to use that route table. The default route table has routes to allow traffic only within the VPC and does not have a route to go out to the internet. The **valtixpoc_mgmt** and **valtixpoc_frontend** subnets need outbound routes to the internet. The script creates 2 route tables:
