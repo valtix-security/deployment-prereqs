@@ -79,11 +79,13 @@ The script creates an IAM user **valtixpoc_user** with the required API access a
         {
             "Effect": "Allow",
             "Action": "iam:PassRole",
-            "Resource": "<arn of the above IAM role> e.g. arn:aws:iam::12345678:role/valtixpoc_fw_role"
+            "Resource": "<arn of the above IAM role>"
         }
     ]
 }
 ```
+
+ARN of the IAM role looks like `arn:aws:iam::12345678:role/valtixpoc_fw_role`
 
 ## VPC
 The script creates a new VPC (called **valtixpoc_vpc**) to host the firewall and all your demo apps/instances. It uses the CIDR 10.0.0.0/16 as the address space.
