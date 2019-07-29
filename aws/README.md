@@ -1,6 +1,12 @@
 # AWS Deployment Prerequisites
 This folder contains a set of terraform scripts which provisions your demo/POC AWS account with a set of pre-requisite steps needed to deploy a valtix firewall appliance.
 
+# Topology
+This is an overview of the topology and the resources that are created with this terraform script. It also shows how all the resources and valtix firewall interact with each other.
+
+![topology](topo.png "AWS Resources")
+
+
 ## Increase Elastic IP Limits
 By default, all AWS accounts are limited to 5 Elastic IPs. Before you deploy a valtix firewall in your AWS account, you need to request an increase in the Elastic IP limit set by AWS. Each instance of the valtix firewall consumes an Elastic IP. An AWS account by default gets 5 Elastic IPs assigned by aws. You may request to increase this limit. The process usually takes only a few minutes. 
 
