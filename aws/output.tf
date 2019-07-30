@@ -38,5 +38,5 @@ output "iam-role-for-firewall" {
 }
 
 output "s3-bucket-techsupport" {
-  value = format("%s-techsupport", replace(var.prefix, "_", "-"))
+  value = aws_s3_bucket.techsupport.id
 }

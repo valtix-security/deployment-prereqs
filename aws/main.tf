@@ -368,7 +368,7 @@ resource "aws_iam_policy" "valtix_s3_access" {
     {
       "Action": "s3:*",
       "Effect": "Allow",
-      "Resource": "${format("arn:aws:s3:::%s-techsupport/*", replace(var.prefix, "_", "-"))}"
+      "Resource":"${aws_s3_bucket.techsupport.arn}/*"
     }
   ]
 }
