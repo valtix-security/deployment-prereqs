@@ -328,7 +328,17 @@ resource "aws_iam_user_policy" "valtix_user" {
             "Effect":"Allow",
             "Action":"iam:PassRole",
             "Resource":"${aws_iam_role.valtix_fw_role.arn}"
-        }
+       },
+       {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
+                }
+            }
+       }
    ]
 }
 EOF

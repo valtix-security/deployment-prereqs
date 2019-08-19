@@ -8,7 +8,7 @@ This is an overview of the topology and the resources that are created with this
 
 
 ## Increase Elastic IP Limits
-By default, all AWS accounts are limited to 5 Elastic IPs. Before you deploy a valtix firewall in your AWS account, you need to request an increase in the Elastic IP limit set by AWS. Each instance of the valtix firewall consumes an Elastic IP. An AWS account by default gets 5 Elastic IPs assigned by aws. You may request to increase this limit. The process usually takes only a few minutes. 
+By default, all AWS accounts are limited to 5 Elastic IPs. Before you deploy a valtix firewall in your AWS account, you need to request an increase in the Elastic IP limit set by AWS. Each instance of the valtix firewall consumes an Elastic IP. An AWS account by default gets 5 Elastic IPs assigned by aws. You may request to increase this limit. The process usually takes only a few minutes.
 
 The demo/POC scenario will consume atleast 2 Elastic IPs. If your account has at least 2 free Elastic IPs, then you may proceed with the next steps before waiting for the limits to be increased.
 
@@ -43,7 +43,7 @@ terraform destroy -var-file values
 
 # Details on what the terraform script does
 
-For the example resources here, the prefix **valtixpoc** is used. 
+For the example resources here, the prefix **valtixpoc** is used.
 
 ## S3 Bucket
 The Valtix firewall uses a S3 bucket to store techsupport information and also the packet capture files (pcap) if configured on the firewall. The script creates a bucket named **valtixpoc-techsupport**.
@@ -65,7 +65,7 @@ Valtix firewalls need write access to the above S3 bucket to upload techsupport 
 ```
 
 ## IAM User for the Valtix Controller
-The Valtix controller accesses your demo/POC AWS account to create firewall instances and network load balancers. We need an IAM user that has API access to the EC2 and ELB services. This user must also be able to assign IAM roles to the instances that are created by the controller.
+The Valtix controller accesses your demo/POC AWS account to create firewall instances and network load balancers. We need an IAM user that has API access to the EC2 and ELB services. This user must also be able to assign IAM roles to the instances that are created by the controller. Valtix creates Elastic Load Balancer to load balance traffic across the firewalls. AWS ELB requires a ELB specific role that's created the first time an ELB is created. If your account has never created an ELB then the user needs permission (via ELB) to create this role. Its called a service linked role that is used by ELB to access AWS services. Valtix *does not* need this role and is solely used by the load balancer. However the user needs to be able to create this role in case its not already present in your account.
 
 The script creates an IAM user **valtixpoc_user** with the required API access and assigns the following policy to this user:
 ```
@@ -86,6 +86,16 @@ The script creates an IAM user **valtixpoc_user** with the required API access a
             "Effect": "Allow",
             "Action": "iam:PassRole",
             "Resource": "<arn of the above IAM role>"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
+                }
+            }
         }
     ]
 }
